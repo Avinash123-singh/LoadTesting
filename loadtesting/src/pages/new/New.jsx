@@ -10,9 +10,11 @@ const New = () => {
       <NewSidebar />
       <div className="flex-1 overflow-y-auto scrollbar-hidden">
         <Header />
-        <TargetUploadBox />
-        <div>
-          <ScenarioTarget />
+        <div className="p-2 sm:p-3 md:p-4">
+          <TargetUploadBox />
+          <div className="mt-2 sm:mt-3 md:mt-4">
+            <ScenarioTarget />
+          </div>
         </div>
       </div>
     </div>

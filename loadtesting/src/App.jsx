@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom'; // ⬅️ Add Navigate here
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Nav from './component/nav.jsx';
 import New from './pages/new/New.jsx';
 import Test from './pages/testResult/Test.jsx';
@@ -11,12 +11,10 @@ import Account from './pages/account/Account.jsx';
 
 function App() {
   return (
-    <div className="pl-52">
+    <div className="pl-24 sm:pl-32 md:pl-48 transition-all duration-300">
       <Nav />
       <Routes>
-        {/* Redirect root path to /new */}
         <Route path="/" element={<Navigate to="/new" replace />} />
-
         <Route path="/new" element={<New />} />
         <Route path="/test" element={<Test />} />
         <Route path="/report" element={<Report />} />

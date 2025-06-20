@@ -24,34 +24,38 @@ const items = [
 
 const NewSidebar = () => {
   return (
-    <div className="w-64 bg-gray-100 p-4 border-r h-full flex flex-col justify-between">
+    <div className="w-32 sm:w-48 md:w-64 bg-gray-100 p-2 sm:p-3 md:p-4 border-r h-full flex flex-col justify-between transition-all duration-300 overflow-hidden">
       {/* Top content */}
-      <div>
-        <div className="relative mb-4">
+      <div className="overflow-y-auto">
+        <div className="relative mb-3 sm:mb-4">
           <input
             type="text"
             placeholder="Search..."
-            className="w-full px-10 py-2 border rounded focus:outline-none"
+            className="w-full px-8 sm:px-10 py-1 sm:py-2 border rounded focus:outline-none text-xs sm:text-sm"
           />
-          <FaSearch className="absolute left-3 top-2.5 text-gray-500" />
+          <FaSearch className="absolute left-2 sm:left-3 top-1.5 sm:top-2.5 text-gray-500 text-sm" />
         </div>
-        <ul className="space-y-3">
+        <ul className="space-y-1 sm:space-y-2 md:space-y-3">
           {items.map((item) => (
             <li
               key={item.label}
-              className="flex items-center gap-3 text-gray-700 hover:text-blue-600 cursor-pointer"
+              className="flex items-center gap-2 sm:gap-3 text-gray-700 hover:text-blue-600 cursor-pointer text-xs sm:text-sm md:text-base"
             >
-              {item.icon}
-              <span>{item.label}</span>
+              <span className="text-sm">{item.icon}</span>
+              <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+                {item.label}
+              </span>
             </li>
           ))}
         </ul>
       </div>
 
       {/* Bottom button */}
-      <button className="mt-4 bg-[#006064] text-white px-4 py-2 rounded  mx-auto">
-        Import from Monitoring
-      </button>
+      <div className="pt-2 px-1 sm:px-0">
+        <button className="w-full bg-[#006064] text-white px-2 py-1.5 rounded text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+          Import from Monitoring
+        </button>
+      </div>
     </div>
   );
 };
