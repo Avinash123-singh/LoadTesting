@@ -4,6 +4,7 @@ import Header from "../../component/Header/header";
 import TargetUploadBox from "./componet/uploadBox";
 import ScenarioTarget from "./componet/ScenarioTarget";
 import LoadtestChart from "./componet/LoadtestChart";
+import LoadInjectorSection from "./componet/LoadInjection"; // ✅ import it
 
 const New = () => {
   return (
@@ -19,6 +20,7 @@ const New = () => {
           <div className="mt-4">
             <LoadtestChart />
           </div>
+          <LoadInjectorSection /> {/* ✅ new section below chart */}
         </div>
       </div>
     </div>

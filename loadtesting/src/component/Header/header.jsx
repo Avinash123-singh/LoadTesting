@@ -12,7 +12,7 @@ const Header = () => {
       <div className="flex flex-col md:flex-row md:items-center gap-7 text-sm text-gray-700">
         <span>Scenario ID: 191616</span>
         <span>Report ID: 191616</span>
-        <button className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+        <button className="bg-[#006064] text-white px-3 py-1 rounded ">
           New Test
         </button>
       </div>

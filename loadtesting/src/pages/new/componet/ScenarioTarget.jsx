@@ -17,7 +17,7 @@ const ScenarioTarget = () => {
           <span className="text-black">OK on May 15, 2025 2:59:53 PM</span>
         </div>
 
-        <button className="bg-teal-600 text-white px-4 py-1 rounded hover:bg-teal-700 text-sm whitespace-nowrap self-end md:self-auto">
+        <button className="bg-[#006064] text-white px-4 py-1 rounded hover:bg-teal-700 text-sm whitespace-nowrap self-end md:self-auto">
           View Details
         </button>
       </div>

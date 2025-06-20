@@ -16,7 +16,7 @@ const TargetUploadBox = () => {
             <p className="text-sm text-gray-400 truncate">lorem ipsum</p>
           </div>
         </div>
-        <button className="border border-blue-500 text-blue-500 px-4 py-1 rounded hover:bg-blue-50 transition whitespace-nowrap flex-shrink-0 w-full sm:w-auto">
+        <button className="border border-[#006064] text-blue-500 px-4 py-1 rounded hover:bg-blue-50 transition whitespace-nowrap flex-shrink-0 w-full sm:w-auto">
           SELECT TARGET
         </button>
       </div>
