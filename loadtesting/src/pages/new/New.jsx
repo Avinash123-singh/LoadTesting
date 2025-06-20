@@ -3,6 +3,7 @@ import NewSidebar from "../../component/SideBar/sidebar";
 import Header from "../../component/Header/header";
 import TargetUploadBox from "./componet/uploadBox";
 import ScenarioTarget from "./componet/ScenarioTarget";
+import LoadtestChart from "./componet/LoadtestChart";
 
 const New = () => {
   return (
@@ -14,6 +15,9 @@ const New = () => {
           <TargetUploadBox />
           <div className="mt-2 sm:mt-3 md:mt-4">
             <ScenarioTarget />
+          </div>
+          <div className="mt-4">
+            <LoadtestChart />
           </div>
         </div>
       </div>

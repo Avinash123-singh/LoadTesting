@@ -5,7 +5,8 @@ const ScenarioTarget = () => {
   const [showTable, setShowTable] = useState(false);
 
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-4 sm:p-6 mx-2 sm:mx-4 my-6 w-full overflow-x-hidden">
+    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-4 sm:p-6  my-6 w-full overflow-x-hidden">
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between md:items-center mb-4 gap-2 w-full">
         <h2 className="text-lg font-semibold text-black">Scenario Target</h2>

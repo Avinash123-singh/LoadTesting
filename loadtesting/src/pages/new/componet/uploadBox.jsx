@@ -3,7 +3,8 @@ import { UploadCloud } from "lucide-react";
 
 const TargetUploadBox = () => {
   return (
-    <div className="w-full lg:w-2/3 max-w-4xl bg-white rounded-2xl shadow-md border border-gray-200 p-4 sm:p-6 my-6 mr-auto ml-2 sm:ml-4">
+    <div className="w-full lg:w-2/3 max-w-4xl bg-white rounded-2xl shadow-md border border-gray-200 p-4 my-6 mr-auto
+">
       {/* Upload Box */}
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden">
         <div className="flex items-start gap-3 flex-1 min-w-0">
