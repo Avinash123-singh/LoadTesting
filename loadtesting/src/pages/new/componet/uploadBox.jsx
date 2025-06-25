@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useRef } from "react";
 import { UploadCloud } from "lucide-react";
 
 const TargetUploadBox = () => {
+  const fileInputRef = useRef(null);
+
+  const handleSelectClick = () => {
+    fileInputRef.current?.click(); // Open the file manager
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      console.log("Selected file:", file.name); // You can handle file processing here
+    }
+  };
+
   return (
-    <div className="w-full lg:w-2/3 max-w-4xl bg-white rounded-2xl shadow-md border border-gray-200 p-4 my-6 mr-auto
-">
+    <div className="w-full lg:w-2/3 max-w-4xl bg-white rounded-2xl shadow-md border border-gray-200 p-4 my-6 mr-auto">
       {/* Upload Box */}
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 overflow-hidden">
         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -16,7 +28,19 @@ const TargetUploadBox = () => {
             <p className="text-sm text-gray-400 truncate">lorem ipsum</p>
           </div>
         </div>
-        <button className="border border-[#006064] text-blue-500 px-4 py-1 rounded hover:bg-blue-50 transition whitespace-nowrap flex-shrink-0 w-full sm:w-auto">
+
+        {/* Hidden file input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+
+        <button
+          onClick={handleSelectClick}
+          className="border border-[#006064] text-blue-500 px-4 py-1 rounded hover:bg-blue-50 transition whitespace-nowrap flex-shrink-0 w-full sm:w-auto"
+        >
           SELECT TARGET
         </button>
       </div>
