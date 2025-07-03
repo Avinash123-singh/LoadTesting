@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
 import Avatar from "../assets/Avatar.svg";
+import Logout from "../assets/Logout.svg";
 import {
   FilePlus,
   FlaskConical,
@@ -20,19 +21,47 @@ const Nav = ({ isCollapsed, toggleCollapse }) => {
   const activeClass = "font-bold underline";
 
   const links = [
-    { to: "/new", icon: <FilePlus className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />, label: "New" },
-    { to: "/test", icon: <FlaskConical className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />, label: "Test" },
-    { to: "/report", icon: <BarChart2 className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />, label: "Report" },
-    { to: "/manage", icon: <Settings className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />, label: "Manage" },
-    { to: "/eswr", icon: <ClipboardList className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />, label: "ESWR" },
-    { to: "/services", icon: <Wrench className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />, label: "Services" },
-    { to: "/account", icon: <User className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />, label: "Account" },
+    {
+      to: "/new",
+      icon: <FilePlus className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />,
+      label: "New",
+    },
+    {
+      to: "/test",
+      icon: <FlaskConical className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />,
+      label: "Test",
+    },
+    {
+      to: "/report",
+      icon: <BarChart2 className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />,
+      label: "Report",
+    },
+    {
+      to: "/manage",
+      icon: <Settings className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />,
+      label: "Manage",
+    },
+    {
+      to: "/eswr",
+      icon: <ClipboardList className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />,
+      label: "ESWR",
+    },
+    {
+      to: "/services",
+      icon: <Wrench className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />,
+      label: "Services",
+    },
+    {
+      to: "/account",
+      icon: <User className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />,
+      label: "Account",
+    },
   ];
 
   return (
     <nav
       className={`fixed top-0 left-0 h-screen bg-[#006064] p-1 sm:p-2 md:p-3 transition-all duration-300 flex flex-col ${
-        isCollapsed ? "w-14 sm:w-16 md:w-20" : "w-40 sm:w-44 md:w-52"  // Increased widths slightly
+        isCollapsed ? "w-14 sm:w-16 md:w-20" : "w-40 sm:w-44 md:w-52" // Increased widths slightly
       }`}
     >
       {/* Logo and Toggle */}
@@ -41,7 +70,7 @@ const Nav = ({ isCollapsed, toggleCollapse }) => {
           src={Logo}
           alt="Logo"
           className={`transition-all duration-300 ${
-            isCollapsed ? "w-6 sm:w-7" : "w-22 sm:w-24 md:w-26"  // Slightly increased logo sizes
+            isCollapsed ? "w-6 sm:w-7" : "w-22 sm:w-24 md:w-26" // Slightly increased logo sizes
           }`}
         />
         <button onClick={toggleCollapse} className="text-white ml-auto">
@@ -54,20 +83,35 @@ const Nav = ({ isCollapsed, toggleCollapse }) => {
       </div>
 
       {/* Avatar and Admin Info */}
-      <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-start"} mb-3 sm:mb-4 px-1 sm:px-2`}>
+      <div
+        className={`flex items-center ${
+          isCollapsed ? "justify-center" : "justify-start"
+        } mb-3 sm:mb-4 px-1 sm:px-2`}
+      >
         <img
           src={Avatar}
           alt="Avatar"
           className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full"
         />
         {!isCollapsed && (
-          <div className="ml-3 sm:ml-4 md:ml-5 flex flex-col justify-center h-16 sm:h-18 md:h-20">
-            <span className="text-white text-xs sm:text-sm md:text-md font-semibold leading-tight">
-              Admin
-            </span>
-            <span className="text-white text-xs sm:text-sm leading-tight">
-              Avinash Singh
-            </span>
+          <div className="ml-3 flex items-center gap-2">
+            <div className="flex flex-col justify-center leading-tight">
+              <span className="text-white text-[10px] sm:text-xs md:text-xs font-semibold">
+                Admin
+              </span>
+              {/* Name and Logout aligned inline */}
+              <div className="flex items-center gap-1 whitespace-nowrap">
+                <span className="text-white text-[10px] sm:text-xs md:text-sm">
+                  Avinash Singh
+                </span>
+                <img
+                  src={Logout}
+                  alt="Logout"
+                  className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 cursor-pointer"
+                  title="Logout"
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>
