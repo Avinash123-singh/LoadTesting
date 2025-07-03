@@ -23,6 +23,7 @@ const Signup = () => {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [otpVerified, setOtpVerified] = useState(false);
+  const [apiMessage, setApiMessage] = useState("");
 
   const countries = getNames();
 
@@ -57,7 +58,7 @@ const Signup = () => {
     alert("OTP verified successfully");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
@@ -66,8 +67,36 @@ const Signup = () => {
       return;
     }
 
-    // Show OTP modal instead of sending OTP immediately
-    setShowOtpModal(true);
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/register', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          mobile: formData.phone,
+          country: formData.country
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      // Show success message and OTP modal
+      setApiMessage("OTP generated successfully please verify otp");
+      setShowOtpModal(true);
+      
+    } catch (error) {
+      setError(error.message || 'An error occurred during registration');
+    }
   };
 
   const completeSignup = () => {
@@ -106,6 +135,11 @@ const Signup = () => {
           <h1 className="text-2xl mb-6 mt-[-20px]">
             <div>Welcome To Load Testing</div>
           </h1>
+          {apiMessage && (
+            <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
+              {apiMessage}
+            </div>
+          )}
           <form onSubmit={handleSubmit}>
             <div className="flex gap-4 mb-4">
               <div className="flex-1">

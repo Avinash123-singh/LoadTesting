@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Configuration from "../configuration/configuration";
 import RecentActivity from "./component/RecentActivity";
+import SummaryActivityChart from "./component/MaxVirtualUsers";
 
 const SummaryReport = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState("summary");

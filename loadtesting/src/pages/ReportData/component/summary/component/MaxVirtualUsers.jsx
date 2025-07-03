@@ -1,87 +1,84 @@
-// src/components/MaxVirtualUsers.jsx
 import React from "react";
-import ReactApexChart from "react-apexcharts";
-import { Card, Typography } from "@mui/material";
+import Chart from "react-apexcharts";
 
 const MaxVirtualUsers = () => {
-  const series = [
-    {
-      name: "Current Year",
-      data: [11000, 10000, 13000, 17000, 25000, 21000, 23000], // Main solid line
-    },
-    {
-      name: "Previous Year",
-      data: [5000, 12000, 21000, 8000, 15000, 20000, 27000], // Dashed line
-    },
-  ];
-
-  const options = {
+  const chartOptions = {
     chart: {
+      height: 250,
       type: "area",
-      height: 300,
       toolbar: { show: false },
     },
-    colors: ["#00BFA6", "#90CAF9"],
-    dataLabels: {
-      enabled: false,
+    dataLabels: { enabled: false },
+    stroke: { curve: "smooth", width: 2 },
+    xaxis: {
+      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+      labels: {
+        style: { colors: "#888", fontSize: "12px" },
+      },
     },
-    stroke: {
-      curve: "smooth",
-      width: [3, 2],
-      dashArray: [0, 5],
+    yaxis: {
+      min: 0,
+      max: 30000,
+      tickAmount: 3,
+      labels: {
+        formatter: (val) => `${Math.round(val / 1000)}K`,
+        style: { colors: "#888", fontSize: "12px" },
+      },
     },
     fill: {
       type: "gradient",
       gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.4,
+        opacityFrom: 0.3,
         opacityTo: 0.1,
-        stops: [0, 100],
       },
     },
-    xaxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-      labels: {
-        style: {
-          fontFamily: "Poppins",
-          fontSize: "13px",
-        },
-      },
-    },
-    yaxis: {
-      labels: {
-        formatter: (val) => `${Math.round(val / 1000)}K`,
-        style: {
-          fontFamily: "Poppins",
-          fontSize: "13px",
-        },
-      },
-    },
-    legend: {
-      show: false,
-    },
-    tooltip: {
-      enabled: true,
-    },
+    colors: ["#00bfa6", "#b2dfdb"],
+    legend: { show: false },
+    grid: { show: false },
   };
 
+  const chartSeries = [
+    {
+      name: "Actual",
+      data: [12000, 10000, 15000, 25000, 27000, 22000, 24000],
+    },
+    {
+      name: "Expected",
+      data: [5000, 15000, 20000, 10000, 15000, 25000, 30000],
+    },
+  ];
+
   return (
-    <Card
-      className="w-full mt-4 p-5 rounded-[20px]"
-      sx={{ boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}
-    >
-      <Typography
-        sx={{
-          fontFamily: "Poppins",
-          fontWeight: 600,
-          fontSize: "16px",
-          marginBottom: "10px",
-        }}
-      >
-        Max Virtual Users
-      </Typography>
-      <ReactApexChart options={options} series={series} type="area" height={250} />
-    </Card>
+    <div className="flex flex-col lg:flex-row items-start gap-4">
+      {/* Left: Info Boxes - no main wrapper, match chart height */}
+      <div className="flex flex-col gap-4 w-full lg:w-[200px] h-full justify-between">
+        <div className="bg-blue-50 p-4 rounded-lg text-center shadow-sm h-[80px] flex flex-col justify-center">
+          <p className="text-gray-500 text-sm">Duration</p>
+          <p className="text-2xl font-bold">32 min</p>
+        </div>
+
+        <div className="bg-blue-50 p-4 rounded-lg text-center shadow-sm h-[80px] flex flex-col justify-center">
+          <p className="text-gray-500 text-sm">Started On</p>
+          <p className="text-2xl font-bold">3:10:04 PM</p>
+        </div>
+
+        <div className="bg-blue-50 p-4 rounded-lg text-center shadow-sm h-[80px] flex flex-col justify-center">
+          <p className="text-gray-500 text-sm">Session ( rate, per min )</p>
+          <p className="text-2xl font-bold">XXX</p>
+        </div>
+      </div>
+
+      {/* Right: Chart Box */}
+      <div className="flex-1 w-full bg-white p-4 rounded-lg shadow h-[270px] flex flex-col justify-between">
+        <h2 className="text-md font-semibold mb-2">Max Virtual Users</h2>
+        <Chart
+          options={chartOptions}
+          series={chartSeries}
+          type="area"
+          height={250}
+        />
+      </div>
+    </div>
   );
 };
 
