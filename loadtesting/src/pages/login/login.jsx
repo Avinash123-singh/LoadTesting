@@ -9,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleShowPassword = () => {
@@ -18,14 +19,49 @@ const Login = () => {
     }, 2000);
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setError("");
-    // Simulate login (no actual API call)
-    console.log("Login attempted with:", { email, password });
-    // For demo purposes, just navigate to home
-    navigate("/");
-  };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setError("");
+  
+  if (!email || !password) {
+    setError("Please fill in all fields");
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Login failed');
+    }
+
+    // Store token and user data
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+
+    // Redirect to the intended page or default to /new
+    const from = location.state?.from?.pathname || "/new";
+    navigate(from, { replace: true });
+
+  } catch (error) {
+    setError(error.message || 'An error occurred during login');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="flex h-screen">
@@ -38,13 +74,13 @@ const Login = () => {
                 className="text-2xl font-extrabold"
                 style={{ color: "#00ACC1" }}
               >
-              LOAD
+                LOAD
               </span>
               <span
                 className="text-2xl font-extrabold"
                 style={{ color: "#FFB400" }}
               >
-        TESTING
+                TESTING
               </span>
             </div>
           </div>
@@ -54,7 +90,11 @@ const Login = () => {
             <div>Load Testing</div>
           </h1>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleLogin}>
             <div className="mb-4">
@@ -68,20 +108,20 @@ const Login = () => {
                 type="email"
                 id="email"
                 placeholder="your@email.com"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#33A9C8]"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm font-medium mb-2">
                 Password
               </label>
               <div className="flex items-center border rounded relative">
                 <input
-                  className="appearance-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#33A9C8]"
                   type={showPassword ? "text" : "password"}
                   placeholder="********"
                   autoComplete="current-password"
@@ -102,13 +142,14 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-[#27A8C0] text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none"
+              className="w-full bg-[#27A8C0] text-white font-semibold py-2 px-4 rounded-md hover:bg-[#1f8696] focus:outline-none focus:ring-2 focus:ring-[#33A9C8] disabled:opacity-50"
+              disabled={isLoading}
             >
-              Log In
+              {isLoading ? 'Logging in...' : 'Log In'}
             </button>
           </form>
 
-          <div className="flex justify-between text-sm items-center mt-2">
+          <div className="flex justify-between text-sm items-center mt-4">
             <a href="#" className="text-black hover:text-teal-500">
               Forgot password?
             </a>

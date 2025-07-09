@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Configuration from "../configuration/configuration";
 import RecentActivity from "./component/RecentActivity";
-import SummaryActivityChart from "./component/MaxVirtualUsers";
+import SessionTarget from "./component/SessionTarget";
 
 const SummaryReport = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState("summary");
 
   const tabContent = {
     summary: (
-      <div className="p-4">
-      
-        <RecentActivity />
-      </div>
+   <div className="p-4">
+    <RecentActivity />
+    <SessionTarget />
+  </div>
     ),
     configuration: <Configuration />,
   };

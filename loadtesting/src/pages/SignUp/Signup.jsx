@@ -21,9 +21,10 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [showOtpModal, setShowOtpModal] = useState(false);
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // Changed to 6 digits
   const [otpVerified, setOtpVerified] = useState(false);
   const [apiMessage, setApiMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const countries = getNames();
 
@@ -48,14 +49,57 @@ const Signup = () => {
       let newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
+      
+      // Auto focus to next input
+      if (value && index < 5) { // Changed to 5 for 6 digits
+        const nextInput = document.getElementById(`otp-input-${index + 1}`);
+        if (nextInput) nextInput.focus();
+      }
     }
   };
 
-  const verifyOtp = () => {
-    // In a real app, you would verify the OTP with your backend here
-    setOtpVerified(true);
-    setShowOtpModal(false);
-    alert("OTP verified successfully");
+  const verifyOtp = async () => {
+    const otpString = otp.join("");
+    if (otpString.length !== 6) { // Changed to 6 digits
+      setError("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          otp: otpString,
+          email: formData.email
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'OTP verification failed');
+      }
+
+      setOtpVerified(true);
+      setShowOtpModal(false);
+      setApiMessage("OTP verified successfully! Redirecting to login...");
+      
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        navigate("/log-in");
+      }, 2000);
+
+    } catch (error) {
+      setError(error.message || 'An error occurred during OTP verification');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -66,6 +110,8 @@ const Signup = () => {
       setError("Passwords do not match.");
       return;
     }
+
+    setIsLoading(true);
 
     try {
       const response = await fetch('http://127.0.0.1:8000/api/register', {
@@ -90,23 +136,14 @@ const Signup = () => {
         throw new Error(data.message || 'Registration failed');
       }
 
-      // Show success message and OTP modal
-      setApiMessage("OTP generated successfully please verify otp");
+      setApiMessage("OTP sent to your email. Please verify to complete registration.");
       setShowOtpModal(true);
       
     } catch (error) {
       setError(error.message || 'An error occurred during registration');
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const completeSignup = () => {
-    if (!otpVerified) {
-      setError("Please verify OTP before signing up.");
-      return;
-    }
-
-    alert("Signup successful!");
-    navigate("/log-in");
   };
 
   return (
@@ -136,7 +173,7 @@ const Signup = () => {
             <div>Welcome To Load Testing</div>
           </h1>
           {apiMessage && (
-            <div className="mb-4 p-3 bg-green-100 text-green-700 rounded">
+            <div className={`mb-4 p-3 rounded ${otpVerified ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
               {apiMessage}
             </div>
           )}
@@ -261,12 +298,13 @@ const Signup = () => {
               </div>
             </div>
 
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-[#27A8C0] text-white font-semibold py-2 rounded hover:bg-[#1f8696] focus:outline-none focus:ring-2 focus:ring-[#33A9C8]"
+              className="w-full bg-[#27A8C0] text-white font-semibold py-2 rounded hover:bg-[#1f8696] focus:outline-none focus:ring-2 focus:ring-[#33A9C8] disabled:opacity-50"
+              disabled={isLoading}
             >
-              Signup
+              {isLoading ? 'Processing...' : 'Signup'}
             </button>
           </form>
           <div className="flex justify-between text-sm items-center mt-2">
@@ -298,45 +336,64 @@ const Signup = () => {
       </div>
 
       {/* OTP Verification Modal */}
-      {showOtpModal && (
+    {showOtpModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Verify Your Email</h2>
-            <p className="mb-4">We've sent an OTP to {formData.email}</p>
+            <p className="mb-4">We've sent a 6-digit OTP to {formData.email}</p>
 
-            <div className="mb-4">
+            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
+            <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Enter OTP
+                Enter 6-digit OTP
               </label>
-              <div className="flex gap-2">
+              <div className="flex gap-2 justify-center">
                 {otp.map((value, index) => (
                   <input
                     key={index}
+                    id={`otp-input-${index}`}
                     type="text"
                     value={value}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     maxLength={1}
-                    className="w-12 h-12 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-1 focus:ring-teal-500 text-lg"
+                    className="w-12 h-12 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-[#33A9C8] text-xl"
+                    autoFocus={index === 0}
                   />
                 ))}
               </div>
             </div>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-between items-center">
               <button
                 type="button"
-                onClick={() => setShowOtpModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded-md"
+                onClick={() => {
+                  setOtp(["", "", "", "", "", ""]);
+                  setError(null);
+                }}
+                className="text-[#27A8C0] text-sm hover:underline"
               >
-                Cancel
+                Clear OTP
               </button>
-              <button
-                type="button"
-                onClick={verifyOtp}
-                className="bg-[#27A8C0] text-white px-4 py-2 rounded-md hover:bg-[#2399ad]"
-              >
-                Verify OTP
-              </button>
+              
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowOtpModal(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md"
+                  disabled={isLoading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={verifyOtp}
+                  className="bg-[#27A8C0] text-white px-4 py-2 rounded-md hover:bg-[#2399ad] disabled:opacity-50"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Verifying...' : 'Verify OTP'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

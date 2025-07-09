@@ -1,8 +1,9 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
 import Avatar from "../assets/Avatar.svg";
 import Logout from "../assets/Logout.svg";
+import {logout} from "../utils/auth"
 import {
   FilePlus,
   FlaskConical,
@@ -19,6 +20,14 @@ const Nav = ({ isCollapsed, toggleCollapse }) => {
   // Increased padding-left and added padding-right for better spacing
   const baseClass = "text-white flex items-center gap-2 px-3 pl-4";
   const activeClass = "font-bold underline";
+
+  const navigate = useNavigate();
+
+   const handleLogout = () => {
+    logout(); // Clear token and user data
+    navigate("/log-in"); // Redirect to login page
+  };
+
 
   const links = [
     {
@@ -109,6 +118,7 @@ const Nav = ({ isCollapsed, toggleCollapse }) => {
                   alt="Logout"
                   className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 cursor-pointer"
                   title="Logout"
+                   onClick={handleLogout}
                 />
               </div>
             </div>
